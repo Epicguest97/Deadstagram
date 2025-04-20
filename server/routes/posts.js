@@ -58,6 +58,41 @@ router.post('/:id/like', async (req, res) => {
   }
 });
 
+// Unlike a post
+router.post('/:id/unlike', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    post.likes = post.likes.filter(uid => uid.toString() !== req.body.userId);
+    await post.save();
+    res.json(post);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Edit a post
+router.put('/:id', upload.single('image'), async (req, res) => {
+  try {
+    const { caption } = req.body;
+    const update = { caption };
+    if (req.file) update.image = req.file.path;
+    const post = await Post.findByIdAndUpdate(req.params.id, update, { new: true });
+    res.json(post);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Delete a post
+router.delete('/:id', async (req, res) => {
+  try {
+    await Post.findByIdAndDelete(req.params.id);
+    res.json({ msg: 'Post deleted' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
 // Comment on a post
 router.post('/:id/comment', async (req, res) => {
   try {
@@ -68,6 +103,39 @@ router.post('/:id/comment', async (req, res) => {
     post.comments.push(comment._id);
     await post.save();
     res.status(201).json(comment);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Edit a comment
+router.put('/:postId/comment/:commentId', async (req, res) => {
+  try {
+    const { text } = req.body;
+    const comment = await Comment.findByIdAndUpdate(req.params.commentId, { text }, { new: true });
+    res.json(comment);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Delete a comment
+router.delete('/:postId/comment/:commentId', async (req, res) => {
+  try {
+    await Comment.findByIdAndDelete(req.params.commentId);
+    // Optionally remove from post.comments
+    await Post.findByIdAndUpdate(req.params.postId, { $pull: { comments: req.params.commentId } });
+    res.json({ msg: 'Comment deleted' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Get all posts by a user
+router.get('/user/:userId', async (req, res) => {
+  try {
+    const posts = await Post.find({ user: req.params.userId }).populate('user', 'username avatar').sort({ createdAt: -1 });
+    res.json(posts);
   } catch (err) {
     res.status(500).json({ msg: 'Server error' });
   }
@@ -85,5 +153,10 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 });
+
+// --- Stories and Following Feed (stubs for future expansion) ---
+// router.post('/story', ...) // To be implemented
+// router.get('/stories', ...) // To be implemented
+// router.get('/feed/following', ...) // To be implemented
 
 export default router;

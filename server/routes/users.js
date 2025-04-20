@@ -3,6 +3,22 @@ import User from '../models/User.js';
 
 const router = express.Router();
 
+// Search users by username or email
+router.get('/search/all', async (req, res) => {
+  const q = req.query.q || '';
+  try {
+    const users = await User.find({
+      $or: [
+        { username: { $regex: q, $options: 'i' } },
+        { email: { $regex: q, $options: 'i' } }
+      ]
+    }).select('-password');
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
 // Get user profile
 router.get('/:id', async (req, res) => {
   try {

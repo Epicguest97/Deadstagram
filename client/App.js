@@ -5,12 +5,22 @@ import LoginPage from './LoginPage';
 import RegisterPage from './RegisterPage';
 import FeedPage from './FeedPage';
 import UploadPage from './UploadPage';
+import UserProfilePage from './UserProfilePage';
+
+import UserSearchBar from './UserSearchBar';
+import UsersPage from './UsersPage';
+import PostPage from './PostPage';
 
 function Navbar() {
   const { user, logout } = useContext(AuthContext);
   return (
-    <nav>
+    <nav style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
       <Link to="/">Feed</Link>
+      <Link to="/users">Users</Link>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <label htmlFor="user-search-bar" style={{ fontSize: 12, color: '#555', marginBottom: 2 }}>Search users</label>
+        <UserSearchBar inputId="user-search-bar" />
+      </div>
       {user ? (
         <>
           <Link to="/upload">Upload</Link>
@@ -35,6 +45,9 @@ function AppRoutes() {
       <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
       <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
       <Route path="/upload" element={user ? <UploadPage /> : <Navigate to="/login" />} />
+      <Route path="/user/:userId" element={<UserProfilePage />} />
+      <Route path="/users" element={<UsersPage />} />
+      <Route path="/post/:postId" element={<PostPage />} />
     </Routes>
   );
 }
