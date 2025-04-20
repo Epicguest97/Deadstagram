@@ -1,0 +1,66 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #fafafa;
+  margin: 0;
+  padding: 0;
+}
+nav {
+  background: #fff;
+  padding: 1em;
+  display: flex;
+  gap: 1em;
+  border-bottom: 1px solid #ddd;
+}
+nav a {
+  text-decoration: none;
+  color: #262626;
+  font-weight: bold;
+}
+nav span {
+  margin-left: auto;
+  font-weight: normal;
+}
+button {
+  margin-left: 1em;
+  padding: 0.3em 0.8em;
+  border: none;
+  background: #3897f0;
+  color: #fff;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.login-page, .register-page, .upload-page, .feed-page {
+  max-width: 400px;
+  margin: 2em auto;
+  background: #fff;
+  padding: 2em;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px #ccc;
+}
+input[type="text"], input[type="email"], input[type="password"], input[type="file"] {
+  display: block;
+  width: 100%;
+  margin: 1em 0;
+  padding: 0.7em;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+button[type="submit"] {
+  width: 100%;
+  background: #3897f0;
+  color: #fff;
+  font-size: 1em;
+}
+.error {
+  color: #e74c3c;
+  margin-top: 0.5em;
+}
+.success {
+  color: #27ae60;
+  margin-top: 0.5em;
+}
+.post {
+  margin-bottom: 2em;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1em;
+}
